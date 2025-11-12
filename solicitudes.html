@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prototipo Tienda - Mis Solicitudes</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+
+<header class="main-header">
+    <div class="logo">
+        <h1><a href="index.html" style="color: white; text-decoration: none;">MiTienda</a></h1>
+    </div>
+
+    <button class="categories-toggle-btn" id="categories-toggle-btn">
+        <i class="fas fa-bars"></i>
+        <span>Categorías</span>
+    </button>
+
+    <nav class="main-nav" id="main-nav-menu">
+        <ul>
+            <li><a href="index.html" onclick="filtrarPorCategoria(1, 'Baterías')">Baterías</a></li>
+            <li><a href="index.html" onclick="filtrarPorCategoria(2, 'Neumáticos')">Neumáticos</a></li>
+            <li><a href="index.html" onclick="filtrarPorCategoria(3, 'Lubricantes de Motor')">Lubricantes</a></li>
+            <li><a href="index.html" onclick="filtrarPorCategoria(4, 'Refrigerantes')">Refrigerantes</a></li>
+            <li><a href="index.html" onclick="filtrarPorCategoria(0, 'Todos los Productos')">Ver Todas las Categorías</a></li>
+        </ul>
+    </nav>
+
+    <div class="search-bar">
+        <input type="text" id="search-input" placeholder="Buscar productos...">
+        <button id="search-button"><i class="fas fa-search"></i></button>
+    </div>
+    <div class="user-actions">
+        <a href="#" id="open-login-modal-btn"><i class="fas fa-user"></i> Mi Cuenta</a>
+        
+        <a href="#" class="cart-link" id="open-cart-modal-btn">
+            <i class="fas fa-shopping-cart"></i> Carrito
+            <span class="cart-counter">0</span>
+        </a>
+    </div>
+</header>
+
+<main class="container">
+    
+    <h2 class="section-title" id="product-grid-title">Mis Solicitudes de Soporte</h2>
+    
+    <div id="solicitudes-container">
+        <p>Cargando tus solicitudes...</p>
+        </div>
+
+</main> 
+
+<div class="modal-overlay" id="login-modal-overlay">
+    <div class="modal-content auth-modal-content">
+        <button class="modal-close" id="login-modal-close">&times;</button>
+        <h2>Iniciar Sesión</h2>
+        <p>Ingresa tus datos para continuar.</p>
+        <form id="login-form">
+            <div class="form-group">
+                <label for="login-email">Correo Electrónico:</label>
+                <input type="email" id="login-email" required>
+            </div>
+            <div class="form-group">
+                <label for="login-password">Contraseña:</label>
+                <div class="password-input-wrapper">
+                    <input type="password" id="login-password" required>
+                    <button type="button" class="toggle-password" id="toggle-password-login">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="modal-button primary" id="login-submit-btn">Ingresar</button>
+                <button type="button" class="modal-button secondary" id="open-register-modal-btn">Registrarse</button>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal-overlay" id="register-modal-overlay">
+    <div class="modal-content auth-modal-content">
+        <button class="modal-close" id="register-modal-close">&times;</button>
+        <h2>Crear Cuenta</h2>
+        <p>Completa tus datos para registrarte.</p>
+        <form id="register-form">
+            <div class="form-group">
+                <label for="register-username">Nombre de Usuario:</label>
+                <input type="text" id="register-username" required>
+            </div>
+            <div class="form-group">
+                <label for="register-email">Correo Electrónico:</label>
+                <input type="email" id="register-email" required>
+            </div>
+            <div class="form-group">
+                <label for="register-password">Contraseña:</label>
+                <div class="password-input-wrapper">
+                    <input type="password" id="register-password" required>
+                    <button type="button" class="toggle-password" id="toggle-password-register">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+                <div class="password-strength-bar">
+                    <div class="strength-fill" id="password-strength-fill"></div>
+                </div>
+                <p class="strength-text" id="password-strength-text"></p>
+                
+                <ul class="password-criteria-list">
+                    <li id="crit-length" class="criteria-item text-danger">Al menos 8 caracteres</li>
+                    <li id="crit-uppercase" class="criteria-item text-danger">Una letra mayúscula</li>
+                    <li id="crit-number" class="criteria-item text-danger">Al menos un número</li>
+                    <li id="crit-special" class="criteria-item text-danger">Un carácter especial (ej. !@#$)</li>
+                </ul>
+            </div>
+            <div class="form-group">
+                <label for="register-password-confirm">Confirmar Contraseña:</label>
+                <input type="password" id="register-password-confirm" required>
+                <p class="password-helper-text" id="password-match-msg"></p>
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="modal-button primary" id="register-submit-btn">Registrarse</button>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal-overlay" id="user-info-modal-overlay">
+    <div class="modal-content auth-modal-content">
+        <button class="modal-close" id="user-info-modal-close">&times;</button>
+        <div class="user-info-header">
+            <div class="profile-pic-uploader" id="profile-pic-uploader">
+                <img id="user-profile-img" src="" alt="Avatar de usuario">
+                <div class="edit-overlay">
+                    <span><i class="fas fa-camera"></i> Cambiar</span>
+                </div>
+            </div>
+            <input type="file" id="file-upload" accept="image/*" style="display: none;">
+            
+            <h3 id="user-info-username">Usuario: ...</h3>
+        </div>
+    
+        <h3>Detalles de la Cuenta</h3>
+        <div class="user-details-body">
+            <div class="user-detail"><strong>Correo:</strong> <span id="user-detail-email">N/A</span></div>
+            <div class="user-detail"><strong>ID de Usuario:</strong> <span id="user-detail-id">N/A</span></div>
+            <div class="user-detail"><strong>Miembro Desde:</strong> <span id="user-detail-since">N/A</span></div>
+        </div>
+        
+        <div class="user-action-button-container">
+            <a href="solicitudes.html" class="modal-button secondary">
+                <i class="fas fa-ticket-alt"></i> Mis Solicitudes
+            </a>
+        </div>
+        
+        <div class="logout-button-container">
+            <button id="user-info-logout-btn" class="logout-button"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</button>
+        </div>
+    </div>
+</div>
+<div class="modal-overlay" id="custom-alert-modal">
+    <div class="alert-modal-content">
+        <div class="alert-icon">
+            <i class="fas fa-check" id="alert-icon-success"></i>
+            <i class="fas fa-times" id="alert-icon-error"></i>
+            <i class="fas fa-info-circle" id="alert-icon-info"></i>
+        </div>
+        <h2 id="alert-title">¡Éxito!</h2>
+        <p id="alert-message">Tu operación se completó.</p>
+        <button class="modal-button primary" id="alert-ok-btn">OK</button>
+    </div>
+</div>
+<div class="modal-overlay" id="cart-modal-overlay">
+    <div class="modal-content" id="cart-modal-content">
+        <button class="modal-close" id="cart-modal-close">&times;</button>
+        <h2>Mi Carrito</h2>
+        <div id="cart-items-container">
+            </div>
+        <div id="cart-footer">
+            <h3 id="cart-total">Total: $0</h3>
+            <button class="modal-button primary" id="cart-checkout-btn">Finalizar Compra</button>
+        </div>
+    </div>
+</div>
+<div class="modal-overlay" id="solicitud-modal-overlay">
+    <div class="modal-content auth-modal-content">
+        <button class="modal-close" id="solicitud-modal-close">&times;</button>
+        <h2>Crear Solicitud de Soporte</h2>
+        <p>Completa el formulario y te contactaremos.</p>
+        <form id="solicitud-form">
+            <div class="form-group">
+                <label for="solicitud-rut">RUT:</label>
+                <input type="text" id="solicitud-rut" required>
+            </div>
+            <div class="form-group">
+                <label for="solicitud-email">Correo de Contacto:</label>
+                <input type="email" id="solicitud-email" required>
+            </div>
+            <div class="form-group">
+                <label for="solicitud-tipo">Tipo de Solicitud:</label>
+                <select id="solicitud-tipo" required>
+                    <option value="" disabled selected>-- Elige una opción --</option>
+                    <option value="Consulta General">Consulta General</option>
+                    <option value="Problema con Pedido">Problema con Pedido</option>
+                    <option value="Garantía / Devolución">Garantía / Devolución</option>
+                    <option value="Otro">Otro</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="solicitud-comentarios">Comentarios:</label>
+                <textarea id="solicitud-comentarios" rows="4" placeholder="Describe tu problema o consulta..."></textarea>
+            </div>
+            <div class="form-group">
+                <label for="solicitud-file-upload-btn">Adjuntar Imagen (Opcional):</label>
+                <input type="file" id="solicitud-file-upload" accept="image/*" style="display: none;">
+                <button type="button" class="modal-button secondary" id="solicitud-file-upload-btn">
+                    <i class="fas fa-upload"></i> Subir Archivo
+                </button>
+                <span id="solicitud-file-name">Ningún archivo seleccionado.</span>
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="modal-button primary" id="solicitud-submit-btn">Enviar Solicitud</button>
+            </div>
+        </form>
+    </div>
+</div>
+<footer class="main-footer">
+    <div class="footer-links">
+        <div>
+            <h4>Servicio al Cliente</h4>
+            <ul>
+                <li><a href="#">Contacto</a></li>
+                <li><a href="#">Preguntas Frecuentes</a></li>
+                <li><a href="#">Seguimiento de Pedido</a></li>
+                <li><a href="#" id="open-solicitud-link">Soporte / Helpdesk</a></li>
+            </ul>
+        </div>
+        <div>
+            <h4>Información</h4>
+            <ul>
+                <li><a href="#">Sobre Nosotros</a></li>
+                <li><a href="#">Términos y Condiciones</a></li>
+                <li><a href="#">Políticas de Privacidad</a></li>
+                <li><a href="/estado-pedido">Ver Estado de Pedido</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>&copy; 2025 Prototipo MiTienda. Todos los derechos reservados.</p>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/app.js"></script>
+
+</body>
+</html>

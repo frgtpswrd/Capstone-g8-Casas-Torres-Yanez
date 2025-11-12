@@ -1,0 +1,1813 @@
+/* ---- Reset Básico y Estilos Globales ---- */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* NUEVA CLASE DE UTILIDAD */
+.hidden {
+    display: none !important; /* !important para asegurar que se oculte */
+}
+
+/* --- NUEVO: ESTILOS PARA STICKY FOOTER --- */
+html, body {
+    height: 100%;
+}
+body {
+    display: flex;
+    flex-direction: column;
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    background-color: #f4f4f4;
+}
+main.container {
+    flex-grow: 1; /* <-- Esta es la magia: empuja el footer hacia abajo */
+}
+/* --- FIN STICKY FOOTER --- */
+
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* ---- Transiciones Globales ---- */
+a, button, input[type="submit"], .product-card {
+    transition: all 0.3s ease;
+}
+
+
+/* ---- 1. Cabecera ---- */
+.main-header {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    position: relative; /* Para anclar el menú desplegable */
+    flex-shrink: 0; /* Evita que el header se encoja */
+}
+
+.main-header .logo h1 {
+    font-size: 24px;
+}
+
+.main-header .search-bar {
+    display: flex;
+    flex-grow: 1; /* La barra de búsqueda toma el espacio restante */
+    margin: 0 20px; /* Margen ajustado */
+}
+
+.main-header .search-bar input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px 0 0 5px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease; 
+}
+
+.main-header .search-bar input:focus {
+    outline: none; 
+    border-color: #007bff; 
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25); 
+}
+
+.main-header .search-bar button {
+    padding: 10px 15px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    border-radius: 0 5px 5px 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
+}
+
+.main-header .search-bar button:hover {
+    background-color: #0056b3; 
+    transform: scale(1.05); 
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2); 
+}
+
+.main-header .search-bar button:active {
+    transform: scale(0.95); 
+}
+
+.main-header .user-actions {
+    display: flex; /* Añadido para alinear los botones de usuario */
+    align-items: center;
+    flex-shrink: 0; /* Evita que se encoja */
+}
+
+.main-header .user-actions a {
+    margin-left: 20px;
+    text-decoration: none;
+    position: relative;
+    padding-bottom: 3px; 
+    white-space: nowrap; /* Evita que "Mi Cuenta" se parta en dos líneas */
+}
+
+.main-header .user-actions a:hover {
+    transform: translateY(-1px); 
+}
+
+.main-header .user-actions a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 1px;
+    background-color: #007bff;
+    left: 0;
+    bottom: 0;
+    transition: width 0.3s ease-out;
+}
+
+.main-header .user-actions a:hover::after {
+    width: 100%;
+}
+
+/* --- 1A. ESTILOS PARA EL NUEVO HEADER OSCURO --- */
+.main-header {
+    background-color: #333; /* Fondo oscuro (igual que el nav) */
+    border-bottom: 1px solid #444; /* Borde sutil */
+}
+
+.main-header .logo h1 {
+    color: #ffffff; /* Título "MiTienda" en blanco */
+}
+
+.main-header .user-actions a {
+    color: #f0f0f0; /* Texto "Mi Cuenta" y "Carrito" en gris claro */
+}
+
+.main-header .user-actions a:hover {
+    color: #ffffff; /* Blanco al pasar el mouse */
+}
+
+/* --- 1B. ESTILOS PARA LA BARRA DE BÚSQUEDA OSCURA --- */
+.main-header .search-bar input {
+    background-color: #555; /* Fondo de la barra */
+    color: #ffffff;         /* Texto al escribir */
+    border-color: #666;
+}
+
+.main-header .search-bar input::placeholder {
+    color: #bbb; /* Color del placeholder */
+}
+
+.main-header .search-bar button {
+    background-color: #007bff; /* Mantenemos el botón azul */
+}
+.main-header .search-bar button:hover {
+    background-color: #0056b3;
+}
+
+
+/* --- 1C. ESTILO PERFIL LOGUEADO (CORREGIDO) --- */
+.profile-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: bold;
+    /* Se quita el color: #333 !important; para que herede el gris claro */
+    text-decoration: none !important;
+}
+.profile-btn i {
+    font-size: 20px;
+    color: #f0f0f0; /* Color del ícono de perfil (gris claro) */
+    transition: transform 0.2s ease;
+}
+.profile-btn:hover i {
+    color: #ffffff; /* Blanco al pasar el mouse */
+}
+
+/* ---- 2. Navegación (AHORA ES EL MENÚ DESPLEGABLE) ---- */
+.main-nav {
+    /* Posición: */
+    position: absolute;
+    top: 100%; /* Justo debajo del header */
+    left: 20px; /* Alineado con el botón */
+    z-index: 1000; /* Por encima de todo */
+
+    /* Apariencia: */
+    background-color: #333;
+    border-radius: 0 0 8px 8px;
+    box-shadow: 0 8px 15px rgba(0,0,0,0.3);
+    overflow: hidden;
+
+    /* Oculto por defecto con una animación */
+    display: none; /* Se activa con JS */
+}
+
+/* Estado abierto (controlado por JS) */
+.main-nav.open {
+    display: block;
+}
+
+.main-nav ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column; /* Apila los links verticalmente */
+    padding: 10px 0;
+    width: 250px; /* Ancho del menú */
+}
+
+.main-nav ul li a {
+    color: white;
+    text-decoration: none;
+    padding: 12px 20px; /* Más padding */
+    display: block;
+    font-weight: bold;
+    position: relative; /* Añadido para el :active */
+}
+
+.main-nav ul li a:hover {
+    background-color: #007bff; /* Azul al pasar el mouse */
+    transform: none; /* Quitamos el transform de antes */
+    box-shadow: none; /* Quitamos la sombra de antes */
+}
+
+/* Efecto al presionar */
+.main-nav ul li a:active {
+    background-color: #0056b3; /* Azul más oscuro */
+    transform: scale(0.98); /* Pequeño hundimiento */
+}
+
+.main-nav ul li a::after {
+    display: none; /* Quitamos la línea de abajo */
+}
+
+/* --- 2B. ESTILO DEL BOTÓN DE CATEGORÍAS --- */
+.categories-toggle-btn {
+    background-color: #007bff; /* Azul */
+    color: white;
+    border: none;
+    padding: 0 15px;
+    height: 40px;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: bold;
+    margin-left: 20px; /* Espacio después del logo */
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+.categories-toggle-btn:hover {
+    background-color: #0056b3;
+}
+.categories-toggle-btn:active {
+    transform: scale(0.95); /* Efecto de clic */
+}
+.categories-toggle-btn i {
+    font-size: 16px;
+}
+
+
+/* ---- 3. Contenido Principal ---- */
+.hero-slider {
+    width: 100%;
+    max-height: 400px; 
+    overflow: hidden; 
+    margin-bottom: 30px;
+    background-color: #ffffff; 
+    border-radius: 8px; 
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1); 
+}
+
+.hero-slider img {
+    width: 100%;
+    height: 100%; 
+    object-fit: contain; 
+}
+
+/* NUEVO: ESTILO PARA TÍTULOS DE SECCIÓN */
+.section-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: #333;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 40px;
+    margin-bottom: 30px;
+    position: relative;
+    padding-bottom: 15px;
+}
+.section-title::after {
+    content: '';
+    position: absolute;
+    display: block;
+    width: 100px;
+    height: 4px;
+    background-color: #007bff;
+    border-radius: 2px;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+
+/* --- Cuadrícula de Productos (MODIFICADA PARA ALINEAR) --- */
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 20px;
+}
+
+/* --- MODIFICADO: PRODUCT CARD AHORA ES FLEXBOX --- */
+.product-card {
+    background: #fff;
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border-radius: 8px; 
+    overflow: hidden;
+    
+    display: flex; /* <-- LA MAGIA EMPIEZA AQUÍ */
+    flex-direction: column; /* Apila los elementos verticalmente */
+}
+
+.product-card:hover {
+    transform: translateY(-5px); 
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2); 
+    border-color: #28a745; 
+}
+
+/* --- MODIFICADO: Contenedor para la info (para alinear) --- */
+.product-card-info {
+    flex-grow: 1; /* <-- Este div empuja el botón hacia abajo */
+    padding: 15px;
+    text-align: center;
+    display: flex; /* <-- AÑADIDO */
+    flex-direction: column; /* <-- AÑADIDO */
+}
+
+.product-card img {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 15px;
+    transition: transform 0.3s ease; 
+}
+
+.product-card:hover img {
+    transform: scale(1.05); 
+}
+
+
+.product-card h3 {
+    font-size: 16px;
+    margin-bottom: 10px;
+    /* Damos una altura mínima para 2 líneas para alinear mejor */
+    min-height: 38px; 
+    flex-grow: 1; /* <-- AÑADIDO: empuja precio/stock hacia abajo */
+}
+
+.product-card .price {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+/* NUEVO: Estilo para el stock */
+.product-card .stock {
+    font-size: 12px;
+    color: #777;
+    margin-bottom: 10px;
+}
+
+/* NUEVO: Contenedor para el botón/selector */
+.product-card-actions {
+    padding: 0 15px 15px 15px; /* Padding solo abajo */
+    min-height: 40px; /* Altura fija para que no salte */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.product-card .add-to-cart {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    width: 100%;
+    border-radius: 5px;
+    font-weight: bold;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
+}
+
+.product-card .add-to-cart:hover {
+    background-color: #218838;
+    transform: translateY(-3px); 
+    box-shadow: 0 6px 12px rgba(0,0,0,0.3); 
+}
+
+.product-card .add-to-cart:active {
+    transform: translateY(0); 
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
+}
+
+/* --- NUEVO: Estilos para el selector de cantidad --- */
+.quantity-selector {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.quantity-selector .quantity-btn {
+    background-color: #f0f0f0;
+    border: none;
+    color: #333;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 5px 15px;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+.quantity-selector .quantity-btn:hover {
+    background-color: #ddd;
+}
+.quantity-selector .quantity-btn:active {
+    background-color: #ccc;
+    transform: scale(0.9);
+}
+.quantity-selector .quantity-btn:first-child {
+    border-radius: 5px 0 0 5px;
+    border-right: 1px solid #ccc;
+}
+.quantity-selector .quantity-btn:last-child {
+    border-radius: 0 5px 5px 0;
+    border-left: 1px solid #ccc;
+}
+.quantity-selector span {
+    font-size: 16px;
+    font-weight: bold;
+    padding: 0 10px;
+    user-select: none; /* Evita que se seleccione el número */
+}
+/* Versión mini para el modal del carrito */
+.quantity-selector.mini {
+    width: 100px;
+}
+.quantity-selector.mini .quantity-btn {
+    padding: 2px 10px;
+    font-size: 14px;
+}
+
+
+/* ---- 4. Pie de Página ---- */
+.main-footer {
+    background-color: #333;
+    color: white;
+    padding: 40px 20px;
+    margin-top: 40px;
+    flex-shrink: 0; /* <-- AÑADIDO para sticky footer */
+}
+
+.main-footer .footer-links {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+
+.main-footer h4 {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.main-footer ul {
+    list-style: none;
+}
+
+.main-footer ul li a {
+    color: #ccc;
+    text-decoration: none;
+    line-height: 2;
+    position: relative;
+    padding-bottom: 3px; 
+}
+
+.main-footer ul li a:hover {
+    color: white; 
+    transform: translateY(-1px); 
+}
+
+.main-footer ul li a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 1px;
+    background-color: white; 
+    left: 0;
+    bottom: 0;
+    transition: width 0.3s ease-out;
+}
+
+.main-footer ul li a:hover::after {
+    width: 100%;
+}
+
+.main-footer .footer-bottom {
+    text-align: center;
+    border-top: 1px solid #555;
+    padding-top: 20px;
+}
+
+/* ---- Estilos del Contador del Carrito (Corregidos) ---- */
+.cart-link {
+    position: relative;
+    padding-right: 10px; 
+}
+
+.cart-counter {
+    background-color: #28a745; 
+    color: white;
+    font-size: 11px;
+    font-weight: bold;
+    padding: 3px 6px;
+    border-radius: 50%; 
+    
+    position: absolute;
+    top: -12px;  
+    right: 5px;   
+    
+    transform: scale(0.9);
+    transition: transform 0.2s ease;
+}
+
+.cart-counter:not(span:empty) {
+    transform: scale(1);
+}
+
+/* ---- 5. Estilos del Chatbot ---- */
+.chat-bubble {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    background-color: #007bff;
+    color: white;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    transition: transform 0.2s ease, background-color 0.2s ease;
+    z-index: 1000;
+}
+
+.chat-bubble:hover {
+    background-color: #0056b3;
+    transform: scale(1.1);
+}
+
+.chat-window {
+    position: fixed;
+    bottom: 100px;
+    right: 25px;
+    width: 350px;
+    height: 450px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 1000;
+    transform-origin: bottom right;
+    transform: scale(0);
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.chat-window.open {
+    transform: scale(1);
+}
+
+.chat-header {
+    background-color: #f1f1f1;
+    padding: 10px 15px;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+    gap: 8px; 
+}
+
+
+.chat-header strong {
+    flex-grow: 1; 
+}
+
+.chat-close {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: #888;
+}
+.chat-close:hover {
+    color: #333;
+}
+
+.chat-messages {
+    flex-grow: 1;
+    padding: 15px;
+    overflow-y: auto; 
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background-color: #f9f9f4;
+}
+
+.message {
+    max-width: 90%;
+    line-height: 1.4;
+    display: flex; 
+}
+
+.bot-message {
+    align-self: flex-start;
+    align-items: flex-end; 
+    gap: 8px;
+}
+
+/* --- 5B. ICONO DEL CHATBOT MEJORADO (NUEVO) --- */
+/* (Este es el nuevo ícono de robot) */
+
+/* El ícono en el header del chat */
+.bot-icon-header {
+    width: 24px;
+    height: 24px;
+    background-color: #007bff; /* Círculo azul */
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: white;
+    font-size: 14px; /* Tamaño del ícono de FA */
+}
+/* Añadimos el ícono usando ::before para que no dependa del JS */
+.bot-icon-header::before {
+    content: '\f544'; /* Código del ícono fas fa-robot */
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+}
+
+
+/* El ícono en cada burbuja de chat */
+.bot-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    background-color: #007bff; /* Círculo azul */
+    
+    /* Centra el ícono de Font Awesome */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 16px; /* Tamaño del ícono de FA */
+}
+
+.bot-message .message-bubble {
+    background-color: #e9e9eb;
+    color: #333;
+    padding: 8px 12px;
+    border-radius: 18px;
+}
+
+.bot-message.typing-indicator .message-bubble {
+    background-color: #e9e9eb;
+    color: #555;
+    font-style: italic;
+}
+
+.user-message {
+    background-color: #007bff;
+    color: white;
+    align-self: flex-end;
+    padding: 8px 12px;
+    border-radius: 18px;
+    max-width: 80%;
+}
+
+/* --- 5C. ESTILOS PARA PRODUCTOS EN EL CHAT (NUEVO) --- */
+.chat-product-list {
+    flex-direction: column;
+    align-items: stretch; /* Ocupa todo el ancho */
+    gap: 8px;
+    padding-right: 20px; /* Espacio para que no choque con la barra de scroll */
+}
+
+.chat-product-card {
+    display: flex;
+    align-items: center;
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    padding: 10px;
+    gap: 10px;
+}
+
+.chat-product-img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 5px;
+    flex-shrink: 0;
+}
+
+.chat-product-info {
+    flex-grow: 1;
+    min-width: 0; /* Permite que el texto se trunque */
+}
+
+.chat-product-info h4 {
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; /* ... si el nombre es muy largo */
+    margin: 0;
+}
+
+.chat-product-info .price {
+    font-size: 13px;
+    font-weight: bold;
+    color: #555;
+}
+
+.add-to-cart-chat {
+    background: #28a745;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    font-size: 16px;
+    cursor: pointer;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s, transform 0.1s ease;
+}
+.add-to-cart-chat:hover {
+    background: #218838;
+}
+.add-to-cart-chat:active {
+    transform: scale(0.9);
+}
+
+
+.chat-input-area {
+    border-top: 1px solid #ddd;
+}
+
+.chat-input-form {
+    display: flex;
+}
+
+.chat-window.chat-guest .chat-input-form {
+    display: none; 
+}
+.chat-window.chat-authenticated .chat-input-form {
+    display: flex; 
+}
+.chat-window.chat-guest .chat-login-prompt {
+    display: block; 
+}
+.chat-window.chat-authenticated .chat-login-prompt {
+    display: none; 
+}
+
+.chat-login-prompt {
+    padding: 15px;
+    text-align: center;
+    background-color: #f9f9f4;
+}
+.chat-login-prompt p {
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+.chat-link-button {
+    display: inline-block;
+    background-color: #007bff;
+    color: white !important; 
+    text-decoration: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: bold;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border: none;
+}
+.chat-link-button:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+    color: white !important;
+}
+
+
+.chat-input-form input {
+    flex-grow: 1;
+    border: none;
+    padding: 12px;
+    font-size: 14px;
+}
+
+.chat-input-form input:focus {
+    outline: none;
+}
+
+.chat-input-form button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 0 15px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.chat-input-form button:hover {
+    background-color: #0056b3;
+}
+
+
+/* ---- 6. Estilos del Modal de Login y Registro ---- */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.modal-overlay.open {
+    opacity: 1;
+    visibility: visible;
+}
+
+.auth-modal-content {
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+    width: 90%;
+    max-width: 400px;
+    position: relative;
+    
+    transform: translateY(-30px);
+    transition: transform 0.3s ease;
+}
+
+.modal-overlay.open .auth-modal-content {
+    transform: translateY(0);
+}
+
+.modal-close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 28px;
+    color: #aaa;
+    cursor: pointer;
+}
+.modal-close:hover {
+    color: #333;
+}
+
+.auth-modal-content h2 {
+    text-align: left;
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+.auth-modal-content p {
+    margin-bottom: 20px;
+    color: #555;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #555;
+    transition: all 0.2s ease-out;
+}
+
+.form-group.focused label {
+    color: #007bff;
+    transform: translateY(-2px);
+}
+
+/* --- MODIFICADO: Se aplica a textarea y select --- */
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: all 0.2s ease-out;
+    font-family: Arial, sans-serif; /* Asegura misma fuente */
+}
+
+.form-group.focused input,
+.form-group.focused textarea,
+.form-group.focused select {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+}
+
+.form-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.modal-button {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+.modal-button.primary {
+    background-color: #007bff;
+    color: white;
+}
+.modal-button.primary:hover {
+    background-color: #0056b3;
+}
+/* --- NUEVO: Estilo para botón deshabilitado --- */
+.modal-button.primary:disabled {
+    background-color: #aaa;
+    cursor: not-allowed;
+}
+.modal-button.secondary {
+    background-color: #e9e9eb;
+    color: #333;
+}
+.modal-button.secondary:hover {
+    background-color: #ddd;
+}
+
+/* ---- 7. Estilos del Custom Alert Modal ---- */
+#custom-alert-modal {
+    z-index: 2001; 
+}
+
+.alert-modal-content {
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+    width: 90%;
+    max-width: 380px;
+    position: relative;
+    text-align: center; 
+    
+    transform: translateY(-30px);
+    transition: transform 0.3s ease;
+}
+
+.alert-modal-content h2 {
+    text-align: center;
+    margin-top: 15px;
+    margin-bottom: 10px;
+    font-size: 24px;
+}
+
+.alert-modal-content p {
+    margin-bottom: 25px;
+    color: #555;
+    font-size: 16px;
+}
+
+.alert-modal-content .modal-button {
+    width: 120px; 
+    margin: 0 auto; 
+}
+
+.alert-icon {
+    width: 80px; 
+    height: 80px;
+    border-radius: 50%;
+    margin: 0 auto 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 4px solid #f0f0f0; 
+    box-sizing: border-box;
+}
+
+.alert-icon i {
+    font-size: 40px; 
+    display: none; 
+}
+
+.alert-modal-content.success .alert-icon {
+    border-color: #a5d6a7; 
+}
+.alert-modal-content.success #alert-icon-success {
+    display: block;
+    color: #28a745; 
+}
+
+.alert-modal-content.error .alert-icon {
+    border-color: #ef9a9a; 
+}
+.alert-modal-content.error #alert-icon-error {
+    display: block;
+    color: #dc3545; 
+}
+
+.alert-modal-content.info .alert-icon {
+    border-color: #90caf9; 
+}
+.alert-modal-content.info #alert-icon-info {
+    display: block;
+    color: #007bff; 
+}
+
+/* ---- 8. ESTILOS DE REGISTRO ---- */
+.password-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-input-wrapper input {
+    padding-right: 40px; 
+}
+
+.toggle-password {
+    position: absolute;
+    right: 1px;
+    top: 1px;
+    bottom: 1px;
+    width: 40px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #888;
+    font-size: 16px;
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+.toggle-password:hover {
+    color: #333;
+}
+.toggle-password:active {
+    transform: scale(0.85) rotate(15deg);
+}
+
+.password-strength-bar {
+    width: 100%;
+    height: 6px;
+    background-color: #eee;
+    border-radius: 3px;
+    margin-top: 8px;
+    overflow: hidden;
+}
+
+.strength-fill {
+    height: 100%;
+    width: 0;
+    background-color: #dc3545; 
+    transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+.strength-fill.weak {
+    background-color: #dc3545; 
+}
+.strength-fill.medium {
+    background-color: #fd7e14; 
+}
+.strength-fill.strong {
+    background-color: #28a745; 
+}
+
+.strength-text {
+    font-size: 12px;
+    margin-top: 4px;
+    color: #555;
+    height: 16px; 
+    text-align: left;
+    transition: color 0.3s ease;
+}
+
+.password-helper-text {
+    font-size: 12px;
+    margin-top: 4px;
+    height: 16px; 
+    text-align: left;
+}
+
+.password-criteria-list {
+    list-style: none;
+    padding: 0;
+    margin: 8px 0 0 0;
+    text-align: left;
+}
+.criteria-item {
+    font-size: 12px;
+    transition: color 0.3s ease;
+}
+
+.text-danger {
+    color: #dc3545;
+}
+.text-danger::before {
+    content: '\f00d'; 
+    color: #dc3545;
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    margin-right: 8px;
+}
+
+.text-success {
+    color: #28a745;
+}
+.text-success::before {
+    content: '\f00c'; 
+    color: #28a745;
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    margin-right: 8px;
+}
+
+
+/* ==========================================================
+   ---- 9. ESTILOS DEL MODAL DE INFORMACIÓN DE USUARIO ----
+   ========================================================== */
+#user-info-modal-overlay .auth-modal-content {
+    max-width: 350px;
+    text-align: center;
+}
+
+.user-info-header {
+    padding: 10px;
+    margin-bottom: 20px;
+}
+
+.profile-pic-uploader {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin: 10px auto 20px auto;
+    border: 3px solid #f0f0f0;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    cursor: pointer;
+}
+.profile-pic-uploader #user-profile-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.2s ease;
+}
+.profile-pic-uploader .edit-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 35%;
+    background: rgba(0, 0, 0, 0.65);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 600;
+    opacity: 0;
+    transform: translateY(100%);
+    transition: all 0.2s ease-in-out;
+}
+.profile-pic-uploader .edit-overlay i {
+    margin-right: 5px;
+    font-size: 12px;
+}
+.profile-pic-uploader:hover #user-profile-img {
+    transform: scale(1.05);
+}
+.profile-pic-uploader:hover .edit-overlay {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.user-info-header h3 {
+    margin: 0;
+    font-size: 18px;
+    color: #333;
+}
+.user-details-body {
+    margin-top: 20px;
+    margin-bottom: 25px;
+    font-size: 14px;
+    text-align: left;
+    padding: 0 10px;
+}
+.user-detail {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+.user-detail:last-child {
+    border-bottom: none;
+}
+.user-detail strong {
+    color: #555;
+    margin-right: 10px;
+}
+.user-detail span {
+    color: #111;
+    font-weight: 500;
+    word-break: break-all;
+}
+
+/* --- NUEVO: Estilo para el botón "Mis Solicitudes" --- */
+.user-action-button-container {
+    margin: 15px 0 10px 0;
+}
+
+.user-action-button-container .modal-button.secondary {
+    display: block; /* Hace que el <a> ocupe todo el ancho */
+    text-align: center;
+    text-decoration: none;
+    padding: 12px;
+    font-size: 16px;
+    font-weight: bold;
+    width: 100%; /* Asegura que ocupe todo el ancho */
+    line-height: 1.5; /* Asegura altura consistente */
+}
+.user-action-button-container .modal-button.secondary i {
+    margin-right: 8px;
+}
+
+
+.logout-button-container {
+    margin-top: 10px; /* Reducido */
+}
+.logout-button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    background-color: #dc3545;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+.logout-button:hover {
+    background-color: #c82333;
+}
+
+/* --- 10. ESTILOS PARA EL MODAL DEL CARRITO (NUEVO) --- */
+#cart-modal-content {
+    background-color: white;
+    padding: 0; 
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+    width: 90%;
+    max-width: 600px; 
+    position: relative;
+    text-align: left;
+    transform: translateY(0); 
+}
+#cart-modal-content h2 {
+    padding: 20px 25px;
+    margin: 0;
+    border-bottom: 1px solid #eee;
+    text-align: left;
+    color: #333; 
+}
+#cart-items-container {
+    padding: 10px 25px;
+    max-height: 400px;
+    overflow-y: auto;
+}
+.cart-empty-msg {
+    padding: 40px 0;
+    text-align: center;
+    color: #777;
+    font-size: 16px;
+}
+.cart-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #f0f0f0;
+}
+.cart-item:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+.cart-item-img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid #eee;
+    flex-shrink: 0;
+}
+.cart-item-info {
+    flex-grow: 1;
+}
+.cart-item-info h4 {
+    margin: 0 0 5px 0;
+    font-size: 16px;
+    color: #333;
+}
+.cart-item-info p { /* Precio */
+    margin: 0;
+    font-size: 14px;
+    color: #555;
+    font-weight: bold;
+}
+.cart-item-details {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 8px;
+}
+
+.cart-item-actions button {
+    background: none;
+    border: none;
+    color: #dc3545; /* Rojo */
+    cursor: pointer;
+    font-size: 16px;
+    padding: 5px;
+    margin-left: 10px; /* Espacio del selector */
+}
+.cart-item-actions button:hover {
+    color: #c82333;
+}
+#cart-footer {
+    padding: 20px 25px;
+    background: #f9f9f9;
+    border-top: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 0 0 10px 10px;
+}
+#cart-total {
+    font-size: 20px;
+    margin: 0;
+    color: #333;
+}
+
+/* --- 11. ESTILOS PARA EL MODAL DE SOLICITUD (NUEVO) --- */
+#solicitud-file-upload-btn {
+    width: 100%;
+    background-color: #f0f0f0;
+    color: #333;
+    font-weight: bold;
+}
+#solicitud-file-upload-btn:hover {
+    background-color: #ddd;
+}
+#solicitud-file-upload-btn i {
+    margin-right: 8px;
+}
+#solicitud-file-name {
+    display: block;
+    margin-top: 10px;
+    font-size: 12px;
+    color: #777;
+    text-align: center;
+}
+
+/* ==========================================================
+   ---- 12. ESTILOS PARA LA PÁGINA "MIS SOLICITUDES" ----
+   ========================================================== */
+
+#solicitudes-container {
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.solicitud-item {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    overflow: hidden; /* Para que el header se vea bien */
+}
+
+.solicitud-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #f9f9f9;
+    padding: 15px 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.solicitud-tipo {
+    font-weight: bold;
+    color: #333;
+    font-size: 1.1em;
+}
+
+.solicitud-fecha {
+    font-size: 0.9em;
+    color: #777;
+}
+
+.solicitud-estado {
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.8em;
+    padding: 4px 8px;
+    border-radius: 4px;
+    color: white;
+}
+
+.estado-pendiente {
+    background-color: #ffc107; /* Amarillo */
+    color: #333;
+}
+
+.estado-respondido,
+.estado-cerrado {
+    background-color: #28a745; /* Verde */
+}
+
+.solicitud-body {
+    padding: 20px;
+}
+.solicitud-body p {
+    margin-bottom: 15px;
+}
+/* --- NUEVO: Estilos para la imagen previa --- */
+.solicitud-imagen-link {
+    display: block;
+    margin-top: 10px;
+    width: fit-content; /* Para que el borde se ajuste a la imagen */
+}
+.solicitud-imagen-preview {
+    max-width: 150px; /* Tamaño de la miniatura */
+    height: auto;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+.solicitud-imagen-preview:hover {
+    transform: scale(1.05);
+    border-color: #007bff;
+}
+
+.comentarios-section {
+    padding: 0 20px 20px 20px;
+}
+
+.respuesta-item {
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 15px;
+}
+.respuesta-admin {
+    background-color: #f0f7ff; /* Azul claro */
+    border: 1px solid #d4e8ff;
+}
+.respuesta-admin strong {
+    color: #0056b3;
+}
+.respuesta-admin p {
+    margin: 5px 0 0 0;
+}
+
+.sin-respuesta {
+    font-style: italic;
+    color: #888;
+    font-size: 0.9em;
+    padding-left: 15px;
+}
+
+/* ==========================================================
+   ---- 13. ESTILOS PARA LA PÁGINA "ADMIN" ----
+   ========================================================== */
+
+.admin-actions {
+    display: flex;
+    gap: 10px;
+    background-color: #f9f9f9;
+    padding: 15px 20px;
+    border-top: 1px solid #eee;
+}
+
+.admin-actions .modal-button {
+    flex: 1;
+    font-size: 14px;
+    padding: 10px;
+}
+
+.admin-actions .modal-button i {
+    margin-right: 8px;
+}
+
+/* Estilo para el modal de respuesta */
+#respuesta-form textarea {
+    min-height: 100px;
+}
+
+#respuesta-form input:disabled,
+#respuesta-form textarea:disabled {
+    background-color: #f4f4f4;
+    color: #777;
+}
+
+/* ==========================================================
+   ---- 14. ESTILOS PARA LA PÁGINA "DASHBOARD" ----
+   ========================================================== */
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.kpi-card {
+    background: #fff;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    text-align: center;
+}
+
+.kpi-card h4 {
+    font-size: 16px;
+    color: #555;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+
+.kpi-card p {
+    font-size: 36px;
+    font-weight: bold;
+    color: #007bff;
+}
+
+.chart-container {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    position: relative;
+    /* Damos una altura mínima para que el gráfico se dibuje bien */
+    min-height: 400px; 
+}
+.chart-container h3 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 18px;
+}
+
+/* ==========================================================
+   ---- 14. ESTILOS PARA LA PÁGINA "DASHBOARD" ----
+   ========================================================== */
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.kpi-card {
+    background: #fff;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    text-align: center;
+}
+
+.kpi-card h4 {
+    font-size: 16px;
+    color: #555;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+
+.kpi-card p {
+    font-size: 36px;
+    font-weight: bold;
+    color: #007bff;
+}
+
+.chart-container {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    position: relative;
+    /* Damos una altura mínima para que el gráfico se dibuje bien */
+    min-height: 400px; 
+}
+.chart-container h3 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 18px;
+}
+
+/* ==========================================================
+   ---- 15. REGLAS DE DISEÑO RESPONSIVO (MÓVIL) ----
+   ========================================================== */
+
+/* Se aplica a pantallas de 768px de ancho o menos */
+@media (max-width: 768px) {
+
+    /* ---- 1. Cabecera (Header) ---- */
+    .main-header {
+        flex-wrap: wrap; /* Permite que los elementos bajen a la siguiente línea */
+        justify-content: space-between; /* Espacia logo y acciones */
+        padding: 15px;
+    }
+
+    .main-header .logo {
+        flex-basis: 50%; /* Ocupa la mitad izquierda */
+    }
+
+    .categories-toggle-btn {
+        order: 2; /* Pasa a la segunda línea */
+        width: 100%; /* Ocupa todo el ancho */
+        margin: 10px 0 0 0; /* Espacio arriba */
+    }
+
+    .main-header .search-bar {
+        order: 3; /* Pasa a la tercera línea */
+        width: 100%; /* Ocupa todo el ancho */
+        margin: 10px 0 0 0;
+    }
+
+    .main-header .user-actions {
+        order: 1; /* Se mantiene arriba, en la mitad derecha */
+        flex-basis: 50%;
+        justify-content: flex-end; /* Alinea a la derecha */
+        margin-left: 0;
+        gap: 15px; /* Espacio entre íconos */
+    }
+    
+    /* Ocultamos el texto de los enlaces de usuario (Mi Cuenta, Carrito) */
+    .main-header .user-actions a {
+        font-size: 0; /* Oculta el texto */
+    }
+    .main-header .user-actions a i {
+        font-size: 22px; /* Aumenta el tamaño del ícono para que sea fácil de tocar */
+        margin-right: 0; 
+    }
+    /* El enlace de Admin también se ajusta */
+    .main-header .user-actions a#admin-panel-link {
+        padding: 0;
+    }
+    /* Devolvemos el tamaño de fuente al contador del carrito */
+    .cart-counter {
+        font-size: 11px; 
+        top: -10px;
+        right: -10px;
+    }
+    
+    /* Hacemos que el menú de categorías ocupe toda la pantalla */
+    .main-nav {
+        left: 0;
+        width: 100%;
+        border-radius: 0;
+    }
+
+    /* ---- 2. Contenido Principal ---- */
+    .container {
+        padding: 10px; /* Menos padding en móviles */
+    }
+    
+    .section-title {
+        font-size: 22px; /* Título más pequeño */
+    }
+    
+    /* La cuadrícula de productos .product-grid ya es responsiva, no necesita cambios */
+
+    /* ---- 3. Chat ---- */
+    .chat-window {
+        width: 100%; /* Ocupa todo el ancho */
+        height: 100%; /* Ocupa toda la altura */
+        right: 0;
+        bottom: 0;
+        border-radius: 0; /* Sin bordes redondeados */
+        z-index: 1500; /* Asegura que esté sobre el header */
+    }
+    
+    .chat-bubble {
+        bottom: 15px;
+        right: 15px;
+        z-index: 1499;
+    }
+
+    /* ---- 4. Pie de Página (Footer) ---- */
+    .main-footer {
+        padding: 30px 15px;
+    }
+
+    .main-footer .footer-links {
+        flex-direction: column; /* Apila las columnas */
+        text-align: center; /* Centra el texto */
+        gap: 25px; /* Espacio entre columnas apiladas */
+    }
+
+    /* ---- 5. Modales ---- */
+    .auth-modal-content, 
+    #cart-modal-content, 
+    .alert-modal-content {
+        width: 95%; /* Un poco más de espacio en los bordes */
+        padding: 20px;
+        max-height: 90vh; /* Evita que el modal sea más alto que la pantalla */
+        overflow-y: auto; /* Permite scroll si el modal es muy alto */
+    }
+    
+    /* Carrito de compras */
+    #cart-items-container {
+         max-height: 350px; /* Reduce altura del carrito en móvil */
+    }
+    
+    .cart-item {
+        flex-wrap: wrap; /* Permite que los items del carrito se reorganicen */
+        gap: 10px;
+    }
+    
+    .cart-item-img {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .cart-item-info h4 {
+        font-size: 14px;
+    }
+    
+    #cart-footer {
+        flex-direction: column; /* Apila el total y el botón */
+        gap: 15px;
+    }
+    
+    #cart-total {
+        font-size: 18px;
+    }
+
+    #cart-footer .modal-button {
+        width: 100%; /* Botón de checkout al 100% */
+    }
+
+    /* Página de Admin/Solicitudes */
+    .solicitud-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .admin-actions {
+        flex-direction: column;
+    }
+
+    /* Dashboard */
+    .dashboard-grid {
+        grid-template-columns: 1fr; /* Una sola columna para los KPIs */
+    }
+
+}
