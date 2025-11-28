@@ -55,12 +55,12 @@ async function cargarTodasLasSolicitudes() {
     const container = document.getElementById('admin-solicitudes-container');
     container.innerHTML = '<p>Cargando todas las solicitudes...</p>';
 
-    // Consultamos Solicitudes y traemos las Respuestas anidadas
+    // --- CORRECCIÓN AQUÍ: Agregado !Respuestas_solicitud_id_fkey ---
     const { data, error } = await client
         .from('Solicitudes')
         .select(`
             *,
-            Respuestas (
+            Respuestas!Respuestas_solicitud_id_fkey (
                 *
             )
         `)

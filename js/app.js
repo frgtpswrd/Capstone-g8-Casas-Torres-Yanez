@@ -98,7 +98,7 @@ function filtrarPorCategoria(categoriaId, categoriaNombre) {
 }
 
 // =======================================================
-// --- 4. NUEVA LÓGICA DE BÚSQUEDA ---
+// --- 5. NUEVA LÓGICA DE BÚSQUEDA ---
 // =======================================================
 
 function inicializarBusqueda() {
@@ -1369,12 +1369,12 @@ async function cargarMisSolicitudes() {
         return;
     }
 
-    // --- MODIFICADO: Ahora SÍ busca las Respuestas ---
+    // --- MODIFICADO: AHORA INCLUYE LA CLAVE FORÁNEA EXPLÍCITA ---
     const { data, error } = await client
         .from('Solicitudes')
         .select(`
             *,
-            Respuestas (
+            Respuestas!Respuestas_solicitud_id_fkey (
                 *
             )
         `)
